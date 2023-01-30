@@ -41,11 +41,16 @@ Steps to run the project...
 ->mvn clean install (runs maven to run unit test, create .jar)
 -jar is placed in the target directory: C:\Users\<user>\ideaProjects\my-spring-boot-library\mySpringBootLibraryApp\target\mySpringBootLibraryApp-0.0.1-SNAPSHOT.jar
 
+Note: I checked a homeland project executible jar into the following location: homeLandHistories\Project Jar
+
 4) Run the .jar file:
 ->cd C:\Users\<user>\ideaProjects\homeLandHistories\homeland
 ->java -jar target/homeland-0.0.1-SNAPSHOT.jar 
 
+Note: I checked a homeland project executible jar into the following location: homeLandHistories\Project Jar
+
 5) Run RESTful API's from Postman
+
 - C POST: 
 --http://localhost:8080/api/add/person
 ---Not done yet. This works for the person, but the address is not yet done. An address is stubbed in the code which is saved to db. Need to finish by getting address from JSON address object. 
@@ -54,7 +59,6 @@ JSON
     "firstName": "Mark",
     "lastName": "Frank"
 }
-
 
 - R GET:
 --Find Person by first Name: http://localhost:8080/api/person/firstName?firstName=Fredrick
