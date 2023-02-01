@@ -8,45 +8,39 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PUBLIC) //Lombok constructor to account for all args scenario
 @Data //Lombok - Creates all getters and setters for class
 @Entity //Specifies this class is an entity for persistence
-@Table(name="address") //Persistence - name of table in database
+@Table(name="ADDRESS") //Persistence - name of table in database
 public class Address {
-
-    @Id //Primary key
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //Generated
-    @Column(name="id") //Name in database table
+    @Id //Primary Key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //PK Generated
+    @Column(name = "ID", nullable = false) //Name in database table
     private Long id;
 
-    @Column(name="person_id")
-    //@NonNull //for the RequiredArgsConstructor - indicates this field is required as a parameter
-    private Long personId;
-
-    @Column(name="street")
+    @Column(name = "STREET", length = 85)
     @NonNull
     private String street;
 
-    @Column(name="city")
+    @Column(name = "CITY", length = 85)
     @NonNull
     private String city;
 
-    @Column(name="state")
+    @Column(name = "STATE", length = 60)
     @NonNull
     private String state;
 
-    @Column(name="zip_code")
+    @Column(name = "ZIP_CODE", length = 10)
     @NonNull
     private String zipCode;
 
+    @Column(name = "COUNTRY", length = 60)
     @NonNull
-    @Column(name="country")
     private String country;
 
-    public Address(Long personId, String street, String city, String state, String zipCode, String country) {
-        this.personId = personId;
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
-        this.country = country;
+    public  Address(Address address) {
+        this.street = address.getStreet();
+        this.city = address.getCity();
+        this.state = address.getState();
+        this.zipCode = address.getZipCode();
+        this.country = address.getCountry();
     }
 
 }
