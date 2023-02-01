@@ -5,6 +5,7 @@ import com.histories.homeland.dao.PersonRepository;
 import com.histories.homeland.entity.Address;
 import com.histories.homeland.entity.Person;
 import com.histories.homeland.service.PersonService;
+import io.micrometer.common.util.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,33 +29,40 @@ class HomelandApplicationTests {
 
 	@Test
 	@Transactional
-	public void testAddDelete() throws Exception {
+	public void testCRUDServices() throws Exception {
 		final String fname = "abcdefghijklmnopqrst";
 		final String lname = "tsrqponmlkjihgfedcba";
+		final String fnameTest = "John";
+		final String cityTest = "Moab";
 
-		//Create a test person & address and post...do not have the persons id at this point since it is generated
-		Person person = new Person(fname, lname/*, new Address("789 South 1023 East", "Ogden", "Utah", "84401", "United States of America")*/);
+		//POST, GET: Create a test person & address, POST the person, GET the person by first and last name, verify person.
+		Person person = new Person(fname, lname, new Address("789 South 1023 East", "Ogden", "Utah", "84401", "United States of America"));
 		personService.postPerson(person);
+		Person addedPerson = new Person();
+		addedPerson = personService.findByFirstAndLastName(fname,lname);
+		assertThat("GET person by first and last name service failed",  !StringUtils.isEmpty(addedPerson.getFirstName()) && !StringUtils.isEmpty(addedPerson.getLastName()));
+		assertThat("POST person service failed.",  addedPerson.getId()!=null && addedPerson.getFirstName().equals(fname) && addedPerson.getLastName().equals(lname));
 
-		//Find the person, add the person id to the foreign key in the address table. Save.
-		person = personService.findByFirstAndLastName(fname,lname);
-		//person.getAddress().setPersonId(person.getId());
-		personRepository.save(person);
+		//GET: Test get by first name
+		addedPerson = personService.findByFirstName(fname); // This also tests the GET method
+		assertThat("GET person by first name service failed.",  addedPerson.getId()!=null && addedPerson.getFirstName().equals(fname));
 
-		//Verify the test person was added
-		person = personService.findByFirstAndLastName(fname, lname);
-		assertThat("Test record was not added to the database", person.getId()!=null);
+		//GET: Test get by last name
+		addedPerson = personService.findByLastName(lname); // This also tests the GET method
+		assertThat("GET person by last name service failed.",  addedPerson.getId()!=null && addedPerson.getLastName().equals(lname));
 
-		//Delete test person
-		personService.deletePerson(fname, lname);
+		//PUT, GET: Change some information to test put
+		addedPerson.setFirstName(fnameTest);
+		addedPerson.getAddress().setCity(cityTest);
+		personService.putPerson(addedPerson.getId(),addedPerson);
+		Person changedPerson = personService.findByFirstAndLastName(addedPerson.getFirstName(),addedPerson.getLastName());
+		assertThat("Put person service failed on first name.", changedPerson.getFirstName().equals(fnameTest));
+		assertThat("Put person service failed on city.", changedPerson.getAddress().getCity().equals(cityTest));
 
-		//Verify test person was deleted
-		person = personService.findByFirstAndLastName(fname, lname);
-		assertThat("Test record was not deleted successfully", person.getId()==null);
-	}
-
-	@Test
-	void contextLoads() {
+		//DELETE: Delete test person and verify
+		personService.deletePerson(changedPerson.getFirstName(), changedPerson.getLastName());
+		Person deletedPerson = personService.findByFirstAndLastName(fname, lname);
+		assertThat("Test record was not deleted successfully", deletedPerson.getId()==null);
 	}
 
 }
