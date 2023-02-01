@@ -16,7 +16,7 @@ Additional Stack Info
 IDE: IntelliJ
 
 Steps to run the project...
-NOTE: Exact path maybe different for you :0)
+NOTE: Exact path maybe different for you. Most of the following is set up for you in the project. You will need to make sure the application and database are running before using the HTTP methods. I included all steps for set up for documentation completeness.
 
 1) Start the database:
 -Create the following directory structure ...\database\data
@@ -34,7 +34,7 @@ NOTE: Exact path maybe different for you :0)
 -- URL: jdbc:hsqldb:hsql://localhost:9001/hldb
 -- User: SA
 -- Password: No password
--NOTE: Check database for tables and data first. Likely do not need to set up tables and data.
+-NOTE: Check database for tables and data first. Should already be set up in this repo.
 ->Run the included script file in three seperate steps: 1-tableCreationScript.sql to set up the person and address, 2-IndexAndConstraintScript to set up indexing and a constraint, 3-dataScript to insert some data into both tables
 --Scripts located in project base folder ...\homeLandHistories\database\scripts
 
@@ -46,11 +46,12 @@ NOTE: Exact path maybe different for you :0)
 
 Note: I checked a homeland project executible jar into the following location: homeLandHistories\Project Jar
 
-4) Example of running the .jar file from the target folder:
-->cd C:\Users\<user>\ideaProjects\homeLandHistories\homeland\target
+4) Example of creating and running the .jar file from the target folder:
+->cd C:\Users\<user>\ideaProjects\homeLandHistories\homeland
+->mvn clean install
 ->java -jar target/homeland-0.0.1-SNAPSHOT.jar 
 
-Note: I checked a homeland project executible jar into the following location: homeLandHistories\Project Jar
+Note: I checked a homeland project executible jar into the following location if you would just like to run that: homeLandHistories\Project Jar
 
 5) Run RESTful API's from Postman
 
@@ -101,7 +102,6 @@ Note: I checked a homeland project executible jar into the following location: h
 -PUT: http://localhost:8080/api/update/person/{id}
 ---Example: http://localhost:8080/api/update/person/11
 ---Note: Use the GET method which finds a person using first and last name to get the id for this methods query param. The id is the primary key for the person object and forign key for the address object.
-
 ---Example Body (non of the fields in the body are required)
 {
     "id": 3,
