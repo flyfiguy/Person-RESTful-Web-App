@@ -1,4 +1,4 @@
-# homeLandHistories
+# homelandHistories
 
 Homeland Histories Interview Project
 
